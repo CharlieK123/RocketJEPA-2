@@ -44,7 +44,7 @@ class JEPA(nn.Module):
         self.target_encoder.requires_grad_(False)
         self.momentum = momentum[0]
         self.objects = len(obj_lengths)
-        self.mask_probs = mask_probs
+        self.register_buffer("mask_probs", torch.as_tensor(mask_probs))
 
     def forward(self, raw_state):
 

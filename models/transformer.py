@@ -1,5 +1,9 @@
-from models.pos_encoding import PosEncoding
-from models.entity_encoding import ObjectEncoder
+try:                                     # imported as models.transformer (main.py)
+    from models.pos_encoding import PosEncoding
+    from models.entity_encoding import ObjectEncoder
+except ImportError:                      # run/imported directly from inside models/
+    from pos_encoding import PosEncoding
+    from entity_encoding import ObjectEncoder
 import torch
 import torch.nn as nn
 import math
@@ -72,8 +76,8 @@ class Transformer(nn.Module):
             and adds them back into x for the proj transformer to decode
             """
 
-            pe = self.pos.table(x.device)[masked_indices]  # [n_masked, DIM]
-            queries = (self.mask_token + pe).unsqueeze(0).expand(x.size(0), -1, -1)
+            pe = self.pos.table(x.device)[masked_indices]  # [B, n_masked, DIM] (per-sample indices)
+            queries = self.mask_token + pe                 # [1, DIM] broadcasts over [B, n_masked, DIM]
             n_masked = queries.size(1)
             x = torch.cat((x, queries), dim=1)
             return x, n_masked
@@ -97,6 +101,6 @@ class Transformer(nn.Module):
             x = self.block(x, i)
 
         # return only the mask-query outputs, in masked_indices order
-        if self.proj: x = self.projection(x, encode=False, n_masked=num_masked)
+        if self.proj: x = self.projection(x, None, encode=False, n_masked=num_masked)
 
         return x

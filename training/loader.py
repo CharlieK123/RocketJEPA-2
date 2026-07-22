@@ -22,7 +22,6 @@ import numpy as np
 import torch
 import zstandard as zstd
 from torch.utils.data import IterableDataset, get_worker_info
-
 ACTION_PREFIX = "player.act."
 
 
@@ -378,7 +377,10 @@ class WindowDataset(IterableDataset):
         self.feature_names = list(base_names)
         self.feat_dim = len(base_names)
         if pad_state:
-            from boost_pad_state import PAD_FEATURE_NAMES
+            try:
+                from training.boost_pad_state import PAD_FEATURE_NAMES
+            except ImportError:      # loader.py run directly from training/
+                from boost_pad_state import PAD_FEATURE_NAMES
             self.feature_names = self.feature_names + PAD_FEATURE_NAMES
             self.feat_dim += len(PAD_FEATURE_NAMES)
         # obj_lengths derived from the ACTUAL feature set (ball / player / opponent /
@@ -431,7 +433,10 @@ class WindowDataset(IterableDataset):
             # boost-pad recharge fractions from RAW positions (per replay)
             pads = None
             if self.pad_state:
-                from boost_pad_state import shard_pad_recharge
+                try:
+                    from training.boost_pad_state import shard_pad_recharge
+                except ImportError:
+                    from boost_pad_state import shard_pad_recharge
                 pads = shard_pad_recharge(arr, meta)          # [total, 34] raw [0,1]
             # symmetric physics-only base (drop actions), RAW
             a = arr.astype(np.float32)
