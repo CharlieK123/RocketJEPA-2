@@ -6,7 +6,7 @@ from copy import deepcopy
 import torch.nn as nn
 
 
-STATES = 10
+STATES = 15
 
 def build_mask(state, mask_probs, num_objects):
     B, T, D = state.shape
@@ -32,7 +32,7 @@ class JEPA(nn.Module):
                  obj_lengths=(12, 22, 16, 23),
                  emb_hdim=256,
                  mask_probs=(0.35, 0.4, 0.05, 0.2),
-                 STATES=10
+                 STATES=15
                  ):
         super().__init__()
 
@@ -42,7 +42,7 @@ class JEPA(nn.Module):
         self.target_encoder = deepcopy(self.encoder)
 
         self.target_encoder.requires_grad_(False)
-        self.momentum = momentum[0]
+        self.m_start, self.m_final, self.m_steps = momentum
         self.objects = len(obj_lengths)
         self.register_buffer("mask_probs", torch.as_tensor(mask_probs))
 
@@ -92,21 +92,24 @@ class JEPA(nn.Module):
             state = self.target_encoder.embedding.build(raw_state)  # [B, HIST, D_S] -> [B, 20, LATENT]
             state = self.target_encoder.pos(state)  # add pos encoding to all tokens
 
+            # target_encoder already applies its final out_norm, so its latents are
+            # unit-RMS normalized here (previously done explicitly with F.rms_norm).
             target_latents = self.target_encoder(state)
             rows = torch.arange(state.size(0), device=state.device).unsqueeze(1)
-            target_latents = F.layer_norm(target_latents, (target_latents.size(-1),))
             masked_target_latents = target_latents[rows, masked_indices]
 
-        return masked_latents, masked_target_latents
+        return masked_latents, masked_target_latents, masked_indices
 
     @torch.no_grad()
-    def update_target_params(self):
+    def update_target_params(self, step):
+        # momentum anneals linearly m_start -> m_final over m_steps, then holds
+        m = self.m_start + (self.m_final - self.m_start) * min(step / self.m_steps, 1.0)
         for new_params, old_params in zip(self.encoder.parameters(), self.target_encoder.parameters()):
             # works to make target new params an EMA of the true encoder.
             # theta_t = (m * theta_t-1) + (1 - m)(theta_t)
             # lerp is Linear Interpolate between the old params and the new params with weight 1-m
             # it ultimately is the same operation as the EMA above
-            old_params.lerp_(new_params, weight=1.0 - self.momentum)
+            old_params.lerp_(new_params, weight=1.0 - m)
 
     def build_mask(self, num_tokens, device, num_masked=5):
         mask = torch.zeros(num_tokens, dtype=torch.bool, device=device)

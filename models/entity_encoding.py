@@ -5,6 +5,24 @@ import numpy as np
 from training.boost_pad_state import BOOST_PADS, PAD_XY, IS_BIG
 
 
+# --- physical-normalization constants (MUST match training.loader._phys_divisor) ---
+# The obs reaching build_obs is physically normalized: positions PER AXIS
+# (x/4096, y/5120, z/2044) and linear velocity PER OBJECT (car /23000, ball /60000).
+# Relative coordinates must be formed in a single ISOTROPIC metric: a rotation does
+# not commute with per-axis scaling (R·S ≠ S·R unless S is uniform), so rotating an
+# anisotropically-normalized vector into the agent frame is geometrically wrong, and
+# subtracting two velocities normalized by different divisors is meaningless. We
+# therefore un-normalize the operands to raw units, subtract + rotate, then re-scale
+# by ONE scalar per quantity.
+POS_DIV = (4096.0, 5120.0, 2044.0)   # per-axis position divisors (all objects)
+CAR_VEL_DIV = 23000.0                # player/opponent linear-velocity divisor
+BALL_VEL_DIV = 60000.0               # ball linear-velocity divisor
+POS_SCALE = 5120.0                   # single isotropic scale for relative positions
+VEL_SCALE = 23000.0                  # single isotropic scale for relative velocities
+#                                    # (= car velocity scale, so self-speed and
+#                                    #  relative-speed read on the same ruler)
+
+
 
 def build_obs(state):
 
@@ -36,6 +54,11 @@ def build_obs(state):
     def to_local(vector):
         return torch.einsum("btij,btj->bti", world_to_local, vector)
 
+    # raw-unit agent state, used as the common origin for every relative coordinate
+    pos_div = torch.tensor(POS_DIV, dtype=state.dtype, device=state.device)
+    agent_pos_raw = agent_position * pos_div
+    agent_vel_raw = agent_lin_vel * CAR_VEL_DIV
+
     self_vec = torch.cat(
         [
             agent_position,
@@ -63,8 +86,8 @@ def build_obs(state):
     opp_fwd = state[:, :, 48:51]
     opp_up = state[:, :, 54:57]
 
-    rel_opp_position = to_local(opp_position - agent_position)
-    rel_opp_lin_vel = to_local(opp_lin_vel - agent_lin_vel)
+    rel_opp_position = to_local(opp_position * pos_div - agent_pos_raw) / POS_SCALE
+    rel_opp_lin_vel = to_local(opp_lin_vel * CAR_VEL_DIV - agent_vel_raw) / VEL_SCALE
     opp_ang_vel = to_local(opp_ang_vel)
     opp_fwd = to_local(opp_fwd)
     opp_up = to_local(opp_up)
@@ -99,8 +122,8 @@ def build_obs(state):
     ball_lin_vel = state[:, :, 3:6]
     ball_ang_vel = state[:, :, 6:9]
 
-    rel_ball_pos = to_local(ball_position - agent_position)
-    rel_ball_lin_vel = to_local(ball_lin_vel - agent_lin_vel)
+    rel_ball_pos = to_local(ball_position * pos_div - agent_pos_raw) / POS_SCALE
+    rel_ball_lin_vel = to_local(ball_lin_vel * BALL_VEL_DIV - agent_vel_raw) / VEL_SCALE
     ball_ang_vel = to_local(ball_ang_vel)
 
     ball_vec = torch.cat(
@@ -151,9 +174,9 @@ def build_obs(state):
         active_frac = state[:, :, 76 + i : 77 + i]
 
         is_big = torch.full_like(active_frac, IS_BIG[i])
-        pad_position = torch.tensor([PAD_XY[i, 0] / 4096.0, PAD_XY[i, 1] / 5120.0, 0.0], dtype=state.dtype, device=state.device)
+        pad_position = torch.tensor([PAD_XY[i, 0], PAD_XY[i, 1], 0.0], dtype=state.dtype, device=state.device)
 
-        rel_position = to_local(pad_position - agent_position)
+        rel_position = to_local(pad_position - agent_pos_raw) / POS_SCALE
 
         boost_vec.append(torch.cat([is_big, active_frac, rel_position], dim=-1))
 

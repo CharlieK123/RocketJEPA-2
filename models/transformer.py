@@ -8,7 +8,7 @@ import torch
 import torch.nn as nn
 import math
 
-STATES = 10
+STATES = 15
 
 
 class Transformer(nn.Module):
@@ -32,12 +32,21 @@ class Transformer(nn.Module):
         norm = lambda: nn.RMSNorm(self.dim, eps=1e-6)
 
         # Transformer assumes the data is already encoded in shape [B, OBJS * HIST, DIM]
-        self.embedding = ObjectEncoder(obj_lengths, residual_dim, emb_dim)
+        if not proj:
+            self.embedding = ObjectEncoder(obj_lengths, residual_dim, emb_dim)
         self.pos = PosEncoding(residual_dim, states=STATES, objects=len(obj_lengths))
 
         self.attention = nn.ModuleList([att() for _ in range(blocks)])
         self.ffn = nn.ModuleList([ffn() for _ in range(blocks)])
         self.norm = nn.ModuleList([norm() for _ in range(blocks * 2)])
+
+        # Final norm on the output tokens. A pre-norm transformer never normalizes
+        # its last block's output, so encoder latents (context + target) and the
+        # predictor's mask-query outputs must be pinned to the same unit-RMS manifold
+        # before the loss compares them. Affine-free to exactly reproduce the old
+        # F.rms_norm-on-targets behaviour and to keep no learnable gain on the
+        # stop-grad target (which would open a scale-collapse path).
+        self.out_norm = nn.RMSNorm(self.dim, eps=1e-6, elementwise_affine=False)
 
         # projector mode: ONE shared learned mask token. Per-slot identity is NOT
         # baked into separate query vectors (the old 5 anonymous queries couldn't
@@ -102,5 +111,9 @@ class Transformer(nn.Module):
 
         # return only the mask-query outputs, in masked_indices order
         if self.proj: x = self.projection(x, None, encode=False, n_masked=num_masked)
+
+        # encoder: normalizes all output latents; predictor: normalizes the mask-query
+        # outputs — either way the returned tokens land on the unit-RMS manifold.
+        x = self.out_norm(x)
 
         return x

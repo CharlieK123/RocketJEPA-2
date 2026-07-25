@@ -1,3 +1,4 @@
+
 # R-JEPA 2 — Handoff Context Pack
 
 **Purpose of this document:** This is a handoff from a Claude Code session (2026-07-23) in which the R-JEPA 2 codebase was fully audited, smoke-tested end-to-end, and cross-checked against Meta's official V-JEPA implementation (facebookresearch/jepa). It contains everything needed to continue the discussion in a fresh chat: project summary, the audit findings, the current discussion focus (**masking distribution design**), and the complete source code of all 8 files. Read this first; the source appendix is ground truth.
@@ -96,41 +97,40 @@ from training.training_loop import train
 
 LR = 1e-4
 WEIGHT_DECAY = 1e-5
-SHARDS        = r"C:\Users\charl\R-JEPA2\data\shards_150k"   # <- point at your local shard directory
-WINDOW        = 10
-BATCH_SIZE    = 2048
-EPOCHS        = 100
-NUM_WORKERS   = 4
-DEVICE        = "cuda" if torch.cuda.is_available() else "cpu"
-CKPT_DIR      = "checkpoints"
+SHARDS = r"C:\Users\charl\R-JEPA2\data\shards_150k"  # <- point at your local shard directory
+WINDOW = 10
+BATCH_SIZE = 2048
+EPOCHS = 100
+NUM_WORKERS = 4
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+CKPT_DIR = "../checkpoints"
 MIRROR = False
 
 loader, ds = build_window_loader(
-        SHARDS, window=WINDOW, batch_size=BATCH_SIZE, num_workers=NUM_WORKERS,
-        pad_state=True, normalize="physical", mirror=MIRROR,
-    )
+    SHARDS, window=WINDOW, batch_size=BATCH_SIZE, num_workers=NUM_WORKERS,
+    pad_state=True, normalize="physical", mirror=MIRROR,
+)
 
 obj_lengths = ds.obj_lengths
 print(obj_lengths)
 
 R_JEPA = JEPA(
-        latent_dim=256,
-        encoder_blocks=5,
-        encoder_hdim=1024,
-        encoder_attheads=4,
-        proj_blocks=2,
-        proj_hdim=128,
-        proj_attheads=4,
-        momentum=(0.995, 1.0, 10_000),
-        obj_lengths=(19, 19, 9, 7, 170),
-        emb_hdim=128,
-        mask_probs=torch.tensor([0.35, 0.4, 0.05, 0.2])
+    latent_dim=256,
+    encoder_blocks=5,
+    encoder_hdim=1024,
+    encoder_attheads=4,
+    proj_blocks=2,
+    proj_hdim=128,
+    proj_attheads=4,
+    momentum=(0.995, 1.0, 10_000),
+    obj_lengths=(19, 19, 9, 7, 170),
+    emb_hdim=128,
+    mask_probs=torch.tensor([0.35, 0.4, 0.05, 0.2])
 )
 
 R_JEPA.to(DEVICE)
 
 optim = torch.optim.AdamW(R_JEPA.parameters(), lr=LR, weight_decay=WEIGHT_DECAY)
-
 
 if __name__ == '__main__':
     try:
