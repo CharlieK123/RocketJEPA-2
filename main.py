@@ -12,7 +12,7 @@ from pathlib import Path
 DATA_DIR = Path("/workspace/data/shards_75k")
 
 LR = (1.5e-4, 4e-4, 1e-5, 100_000)   # start, peak, final, total
-WARMUP_STEPS = 15_000               # keep
+WARMUP_STEPS = 7_000               # keep
 WEIGHT_DECAY = (0.04, 0.4)   # (start, final) cosine-ramped UP over LR[3] steps (V-JEPA style)
 SHARDS        = str(DATA_DIR)   # <- point at your local shard directory
 WINDOW        = 15
