@@ -27,10 +27,11 @@ def wd_schedule(step, wd, total_steps):
     return final + 0.5 * (start - final) * (1.0 + math.cos(math.pi * t))
 
 
-def save_checkpoint(model, path, optim=None, epoch=None):
-    """Save the model (and optionally optimizer/epoch) to `path`.
+def save_checkpoint(model, path, optim=None, epoch=None, meta=None):
+    """Save the model (and optionally optimizer/epoch/meta) to `path`.
 
-    Creates parent dirs as needed. Reload with:
+    `meta` is an arbitrary JSON-like dict (hyperparams, step, train time...)
+    stored under ckpt["meta"]. Creates parent dirs as needed. Reload with:
         ckpt = torch.load(path, map_location=device)
         model.load_state_dict(ckpt["model"])
     """
@@ -41,6 +42,8 @@ def save_checkpoint(model, path, optim=None, epoch=None):
         ckpt["optim"] = optim.state_dict()
     if epoch is not None:
         ckpt["epoch"] = epoch
+    if meta is not None:
+        ckpt["meta"] = meta
     torch.save(ckpt, path)
     return str(path)
 
