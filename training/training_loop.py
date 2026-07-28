@@ -153,11 +153,13 @@ def train(model, loader, optim, lr, warmup_steps, wd, device='cuda'):
             model.update_target_params(step)
 
             # periodic checkpointing: rolling latest (crash recovery) +
-            # tagged snapshots every 25k for downstream probe comparisons
+            # tagged snapshots at a hand-picked schedule for downstream probe
+            # comparisons: dense early, then every 10k past 50k
             if step and step % 5_000 == 0:
                 save_checkpoint(model, "checkpoints/rjepa_latest.pt", optim=optim, epoch=epoch)
-            if step and step % 25_000 == 0:
-                save_checkpoint(model, f"checkpoints/rjepa_step{step // 1000}k.pt")
+            _tagged = {5_000, 8_000, 10_000, 12_000, 15_000, 20_000, 25_000, 30_000, 40_000, 50_000}
+            if step and (step in _tagged or (step > 50_000 and step % 10_000 == 0)):
+                save_checkpoint(model, f"latest_checkpoints/rjepa_step{step // 1000}k.pt")
 
             # eval
             if step % 50 == 0:

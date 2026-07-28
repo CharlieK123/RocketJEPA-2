@@ -26,10 +26,10 @@ class Transformer(nn.Module):
 
         # FFN: 1 layer w GeLU activation
         # MHA: n head attention
-        # norm: RMS norm
+        # norm: LayerNorm
         ffn = lambda: nn.Sequential(nn.Linear(residual_dim, hidden_dim), nn.GELU(), nn.Linear(hidden_dim, residual_dim))
         att = lambda: nn.MultiheadAttention(self.dim, att_heads, batch_first=True)
-        norm = lambda: nn.RMSNorm(self.dim, eps=1e-6)
+        norm = lambda: nn.LayerNorm(self.dim, eps=1e-6)
 
         # Transformer assumes the data is already encoded in shape [B, OBJS * HIST, DIM]
         if not proj:
@@ -42,11 +42,11 @@ class Transformer(nn.Module):
 
         # Final norm on the output tokens. A pre-norm transformer never normalizes
         # its last block's output, so encoder latents (context + target) and the
-        # predictor's mask-query outputs must be pinned to the same unit-RMS manifold
-        # before the loss compares them. Affine-free to exactly reproduce the old
-        # F.rms_norm-on-targets behaviour and to keep no learnable gain on the
+        # predictor's mask-query outputs must be pinned to the same normalized manifold
+        # before the loss compares them. Affine-free to match I-JEPA's
+        # F.layer_norm-on-targets behaviour and to keep no learnable gain on the
         # stop-grad target (which would open a scale-collapse path).
-        self.out_norm = nn.RMSNorm(self.dim, eps=1e-6, elementwise_affine=False)
+        self.out_norm = nn.LayerNorm(self.dim, eps=1e-6, elementwise_affine=False)
 
         # projector mode: ONE shared learned mask token. Per-slot identity is NOT
         # baked into separate query vectors (the old 5 anonymous queries couldn't
@@ -54,6 +54,23 @@ class Transformer(nn.Module):
         # slot's position encoding, so each query is mask_token + pos[masked_idx].
         if proj is not False:
             self.mask_token = nn.Parameter(torch.randn(1, residual_dim))
+
+        # Depth-dependent residual rescaling (BEiT/DINO/MAE, carried into I-JEPA &
+        # V-JEPA). Every residual branch pours variance into the stream, so left
+        # alone the stream norm grows ~sqrt(depth) and the last blocks dominate at
+        # init. Scaling each block's OUTPUT projections (attn out_proj + FFN fc2)
+        # by 1/sqrt(2 * layer_id) holds the residual-stream variance ~constant with
+        # depth, for a calmer, better-conditioned start.
+        self.fix_init_weight()
+
+    def fix_init_weight(self):
+        # layer_id is 1-indexed: block 0 -> /sqrt(2*1), block 1 -> /sqrt(2*2), ...
+        def rescale(param, layer_id):
+            param.div_(math.sqrt(2.0 * layer_id))
+
+        for layer_id in range(self.blocks):
+            rescale(self.attention[layer_id].out_proj.weight.data, layer_id + 1)
+            rescale(self.ffn[layer_id][2].weight.data, layer_id + 1)
 
     def block(self, x, i):
 
@@ -101,7 +118,7 @@ class Transformer(nn.Module):
         """
         forward pass for the transformer, projector specific functions before and after main pass
         to deal with masked tokens, otherwise standard multi-block Pre-Norm transformer with
-        RMS norm and MHA.
+        LayerNorm and MHA.
         """
 
         if self.proj: x, num_masked = self.projection(x, masked_indices)
@@ -113,7 +130,7 @@ class Transformer(nn.Module):
         if self.proj: x = self.projection(x, None, encode=False, n_masked=num_masked)
 
         # encoder: normalizes all output latents; predictor: normalizes the mask-query
-        # outputs — either way the returned tokens land on the unit-RMS manifold.
+        # outputs — either way the returned tokens land on the LayerNorm manifold.
         x = self.out_norm(x)
 
         return x

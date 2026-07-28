@@ -70,7 +70,7 @@ def batch_collapse_metrics(embeddings):
 # The panel above (erank/cos/vstd/dead) DETECTS collapse; the helpers below try
 # to attribute its CAUSE. This model's only defenses against *directional*
 # collapse (erank->1, cos->1) are the BYOL-style EMA + predictor dynamics --
-# out_norm is RMSNorm and fixes scale only, so it is blind to the exact failure
+# out_norm is LayerNorm and fixes only mean/scale, so it is blind to the exact failure
 # we keep hitting. These metrics fingerprint the fragile parts:
 #
 #   module_grad_norms / grad_norm  -- pre-clip grad norm per module. A SUDDEN

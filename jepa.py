@@ -6,7 +6,7 @@ from copy import deepcopy
 import torch.nn as nn
 
 
-STATES = 15
+STATES = 10
 
 def build_mask(state, mask_probs, num_objects):
     B, T, D = state.shape
@@ -32,7 +32,7 @@ class JEPA(nn.Module):
                  obj_lengths=(12, 22, 16, 23),
                  emb_hdim=256,
                  mask_probs=(0.35, 0.4, 0.05, 0.2),
-                 STATES=15
+                 STATES=10
                  ):
         super().__init__()
 
@@ -93,7 +93,7 @@ class JEPA(nn.Module):
             state = self.target_encoder.pos(state)  # add pos encoding to all tokens
 
             # target_encoder already applies its final out_norm, so its latents are
-            # unit-RMS normalized here (previously done explicitly with F.rms_norm).
+            # LayerNorm normalized here (previously done explicitly with F.rms_norm).
             target_latents = self.target_encoder(state)
             rows = torch.arange(state.size(0), device=state.device).unsqueeze(1)
             masked_target_latents = target_latents[rows, masked_indices]

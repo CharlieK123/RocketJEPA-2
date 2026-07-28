@@ -4,11 +4,11 @@ from training.loader import build_window_loader
 from training.functions import save_checkpoint
 from training.training_loop import train
 
-LR = (2e-4, 4e-4, 1e-6, 210_000)   # start, peak, final, total
-WARMUP_STEPS = 20_000              # keep
+LR = (4e-4, 1e-3, 1e-5, 210_000)   # start, peak, final, total
+WARMUP_STEPS = 20_000               # keep
 WEIGHT_DECAY = (0.04, 0.4)   # (start, final) cosine-ramped UP over LR[3] steps (V-JEPA style)
 SHARDS        = r"C:\Users\charl\R-JEPA2\data\shards_150k"   # <- point at your local shard directory
-WINDOW        = 15
+WINDOW        = 10
 BATCH_SIZE    = 2048
 EPOCHS        = 100
 NUM_WORKERS   = 4
@@ -16,12 +16,12 @@ DEVICE        = "cuda" if torch.cuda.is_available() else "cpu"
 CKPT_DIR      = "../checkpoints"
 MIRROR = True
 
-# everything below is guarded so Windows-spawn DataLoader workers (which re-import
+# everything below is guarded so Window s-spawn DataLoader workers (which re-import
 # this module) don't rebuild the loader/model or push extra copies onto the GPU
 if __name__ == '__main__':
     loader, ds = build_window_loader(
             SHARDS, window=WINDOW, batch_size=BATCH_SIZE, num_workers=NUM_WORKERS,
-            pad_state=True, normalize="physical", mirror=MIRROR, gap=3
+            pad_state=True, normalize="physical", mirror=MIRROR, gap=2
 
         )
 
@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
     R_JEPA.to(DEVICE)
 
-    optim = torch.optim.AdamW(R_JEPA.parameters(), lr=LR[0], weight_decay=WEIGHT_DECAY[0])
+    optim = torch.optim.AdamW(R_JEPA.parameters(), lr=LR[0], weight_decay=WEIGHT_DECAY[0], eps=1e-6)
 
     try:
         train(R_JEPA, loader, optim, lr=LR, warmup_steps=WARMUP_STEPS, wd=WEIGHT_DECAY, device=DEVICE)
