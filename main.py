@@ -11,12 +11,12 @@ from pathlib import Path
 
 DATA_DIR = Path("/workspace/data/shards_75k")
 
-LR = (1.5e-4, 6.5e-4, 1e-5, 210_000)   # start, peak, final, total
+LR = (1.5e-4, 4e-4, 1e-5, 100_000)   # start, peak, final, total
 WARMUP_STEPS = 15_000               # keep
 WEIGHT_DECAY = (0.04, 0.4)   # (start, final) cosine-ramped UP over LR[3] steps (V-JEPA style)
 SHARDS        = str(DATA_DIR)   # <- point at your local shard directory
 WINDOW        = 15
-BATCH_SIZE    = 2048
+BATCH_SIZE    = 3450
 EPOCHS        = 100
 NUM_WORKERS   = 4
 DEVICE        = "cuda" if torch.cuda.is_available() else "cpu"
