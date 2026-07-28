@@ -7,10 +7,14 @@ from jepa import JEPA
 from training.loader import build_window_loader
 from training.training_loop import train
 
+from pathlib import Path
+
+DATA_DIR = Path("/workspace/data/shards_75k")
+
 LR = (4e-4, 1e-3, 1e-5, 210_000)   # start, peak, final, total
 WARMUP_STEPS = 20_000               # keep
 WEIGHT_DECAY = (0.04, 0.4)   # (start, final) cosine-ramped UP over LR[3] steps (V-JEPA style)
-SHARDS        = r"C:\Users\charl\R-JEPA2\data\shards_150k"   # <- point at your local shard directory
+SHARDS        = DATA_DIR   # <- point at your local shard directory
 WINDOW        = 10
 BATCH_SIZE    = 2048
 EPOCHS        = 100
