@@ -15,7 +15,7 @@ LR = (4e-4, 1e-3, 1e-5, 210_000)   # start, peak, final, total
 WARMUP_STEPS = 30_000               # keep
 WEIGHT_DECAY = (0.04, 0.4)   # (start, final) cosine-ramped UP over LR[3] steps (V-JEPA style)
 SHARDS        = str(DATA_DIR)   # <- point at your local shard directory
-WINDOW        = 10
+WINDOW        = 15
 BATCH_SIZE    = 2048
 EPOCHS        = 100
 NUM_WORKERS   = 4
@@ -27,16 +27,16 @@ GAP = 2
 # JSON-serializable so it can be dumped to config.json and stamped into every
 # checkpoint; mask_probs is converted to a tensor at model construction.
 MODEL_CFG = dict(
-        latent_dim=256,
-        encoder_blocks=6,
+        latent_dim=384,
+        encoder_blocks=10,
         encoder_hdim=1024,
         encoder_attheads=4,
-        proj_blocks=3,
-        proj_hdim=128,
+        proj_blocks=4,
+        proj_hdim=256,
         proj_attheads=4,
         momentum=(0.998, 1.0, LR[3]),   # anneal over the whole run, in lockstep with the LR
         obj_lengths=(19, 19, 9, 7, 170),
-        emb_hdim=128,
+        emb_hdim=512,
         mask_probs=[0.10, 0.35, 0.45, 0.05, 0.05],
 )
 
