@@ -6,7 +6,7 @@ from copy import deepcopy
 import torch.nn as nn
 
 
-STATES = 10
+STATES = 15
 
 def build_mask(state, mask_probs, num_objects):
     B, T, D = state.shape
@@ -32,7 +32,7 @@ class JEPA(nn.Module):
                  obj_lengths=(12, 22, 16, 23),
                  emb_hdim=256,
                  mask_probs=(0.35, 0.4, 0.05, 0.2),
-                 STATES=10
+                 STATES=15
                  ):
         super().__init__()
 
