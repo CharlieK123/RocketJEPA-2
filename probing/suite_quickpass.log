@@ -1,0 +1,252 @@
+[tr] 24000 windows from shard_00310.zst in 12s
+[tr] windows: (24000, 20, 110)
+[va] 8000 windows from shard_00312.zst in 12s
+[va] windows: (8000, 20, 110)
+targets ready; event base rates: {'ball_ground_1s': 0.38, 'ball_impulse_1s': 0.963, 'opp_burn_1s': 0.425, 'opp_closer_1s': 0.503, 'opp_air_1s': 0.101, 'self_jump': 0.138, 'self_boostbtn': 0.219, 'opp_boostbtn': 0.222}
+
+=== step5k ===
+  [step5k] extracted in 12s
+  [step5k] D masked ball  -> ball rel pos @s9          lin=0.448 knn=0.11 rff=0.461 mlp=0.287
+  [step5k] D masked ball  -> ball rel vel @s9          lin=0.258 knn=0.049 rff=0.258 mlp=0.158
+  [step5k] D masked ball CAT -> ball rel pos           lin=0.518 mlp=0.408
+  [step5k] D masked opp   -> opp rel pos @s9           lin=0.481 knn=0.026 rff=0.489 mlp=0.301
+  [step5k] D masked opp   -> opp rel vel @s9           lin=0.311 knn=0.01 rff=0.334 mlp=0.199
+  [step5k] D masked opp CAT -> opp rel pos             lin=0.554 mlp=0.396
+  [step5k] D masked self  -> own boost                 lin=0.461 mlp=0.223
+  [step5k] D masked self CAT -> self loc vel           lin=0.566 mlp=0.402
+  [step5k] P predictor(ball) s9 -> ball rel pos        lin=0.234 mlp=0.103
+  [step5k] P predictor(ball) s5 -> ball rel pos@s5     lin=0.182
+  [step5k] P predictor(ball) s1 -> ball rel pos@s1     lin=0.161
+  [step5k] P predictor(opp) s9 -> opp rel pos          lin=0.25 mlp=0.127
+  [step5k] R car tokens -> ball rel pos (routing)      lin=0.899 knn=0.047 rff=0.785 mlp=0.485
+  [step5k] I ball token -> ball rel pos                lin=0.997
+  [step5k] I ball token -> ball rel vel                lin=0.999
+  [step5k] I opp token  -> opp rel pos                 lin=0.989
+  [step5k] I self token -> own boost                   lin=0.996
+  [step5k] I env token  -> secs remaining              lin=1.0
+  [step5k] I boost token -> 3 pad timers               lin=0.777
+  [step5k] F s9 tokens -> ball rel pos +0.4s           lin=0.985 mlp=0.827
+  [step5k] F s9 tokens -> ball rel pos +1s             lin=0.899 knn=0.267 rff=0.864 mlp=0.782
+  [step5k] F s9 tokens -> ball rel pos +2s             lin=0.727 mlp=0.648
+  [step5k] F s9 tokens -> ball loc vel +1s             lin=0.363 knn=0.122 rff=0.353 mlp=0.244
+  [step5k] F s9 tokens -> opp rel pos +1s              lin=0.941 mlp=0.815
+  [step5k] F s9 tokens -> own displacement +1s         lin=0.744 mlp=0.52
+  [step5k] F pooled all -> ball rel pos +1s            lin=0.786
+  [step5k] E s9 tokens -> ball grounded <=1s           lin=0.742 mlp=0.748
+  [step5k] E s9 tokens -> ball impulse <=1s            lin=0.776 mlp=0.732
+  [step5k] E s9 tokens -> opp burns boost <=1s         lin=0.71 mlp=0.725
+  [step5k] E s9 tokens -> opp closer @+1s              lin=0.729 mlp=0.781
+  [step5k] E s9 tokens -> opp airborne @+1s            lin=0.797 mlp=0.808
+  [step5k] A s9 tokens -> SELF throttle+steer          lin=0.219 mlp=0.186
+  [step5k] A s9 tokens -> SELF boost held              lin=0.716 mlp=0.708
+  [step5k] A s9 tokens -> SELF jump held               lin=0.869 mlp=0.874
+  [step5k] A s9 tokens -> OPP throttle+steer           lin=0.127 rff=0.118 mlp=0.107
+  [step5k] A s9 tokens -> OPP boost held               lin=0.681 mlp=0.691
+  geometry: {"ctx_all": {"erank": 2.3, "top1_share": 0.742, "cos": 0.99, "dead_dims": 0.0}, "tgt_all": {"erank": 2.6, "top1_share": 0.782, "cos": 0.999, "dead_dims": 0.0}, "tgt_s9cat": {"erank": 4.3, "top1_share": 0.632, "cos": 0.998, "dead_dims": 0.0}, "maskball_pool": {"erank": 2.3, "top1_share": 0.649, "cos": 0.989, "dead_dims": 0.0}, "predball_s9": {"erank": 1.2, "top1_share": 0.967, "cos": 0.999, "dead_d
+
+=== step20k ===
+  [step20k] extracted in 12s
+  [step20k] D masked ball  -> ball rel pos @s9          lin=0.543 knn=0.453 rff=0.571 mlp=0.621
+  [step20k] D masked ball  -> ball rel vel @s9          lin=0.313 knn=0.225 rff=0.319 mlp=0.349
+  [step20k] D masked ball CAT -> ball rel pos           lin=0.701 mlp=0.715
+  [step20k] D masked opp   -> opp rel pos @s9           lin=0.649 knn=0.576 rff=0.675 mlp=0.722
+  [step20k] D masked opp   -> opp rel vel @s9           lin=0.423 knn=0.318 rff=0.438 mlp=0.478
+  [step20k] D masked opp CAT -> opp rel pos             lin=0.839 mlp=0.837
+  [step20k] D masked self  -> own boost                 lin=0.752 mlp=0.78
+  [step20k] D masked self CAT -> self loc vel           lin=0.743 mlp=0.752
+  [step20k] P predictor(ball) s9 -> ball rel pos        lin=0.665 mlp=0.679
+  [step20k] P predictor(ball) s5 -> ball rel pos@s5     lin=0.711
+  [step20k] P predictor(ball) s1 -> ball rel pos@s1     lin=0.858
+  [step20k] P predictor(opp) s9 -> opp rel pos          lin=0.828 mlp=0.842
+  [step20k] R car tokens -> ball rel pos (routing)      lin=0.602 knn=0.448 rff=0.632 mlp=0.694
+  [step20k] I ball token -> ball rel pos                lin=0.853
+  [step20k] I ball token -> ball rel vel                lin=0.702
+  [step20k] I opp token  -> opp rel pos                 lin=0.948
+  [step20k] I self token -> own boost                   lin=0.929
+  [step20k] I env token  -> secs remaining              lin=0.046
+  [step20k] I boost token -> 3 pad timers               lin=0.121
+  [step20k] F s9 tokens -> ball rel pos +0.4s           lin=0.936 mlp=0.861
+  [step20k] F s9 tokens -> ball rel pos +1s             lin=0.859 knn=0.466 rff=0.73 mlp=0.804
+  [step20k] F s9 tokens -> ball rel pos +2s             lin=0.703 mlp=0.678
+  [step20k] F s9 tokens -> ball loc vel +1s             lin=0.344 knn=0.22 rff=0.292 mlp=0.287
+  [step20k] F s9 tokens -> opp rel pos +1s              lin=0.925 mlp=0.902
+  [step20k] F s9 tokens -> own displacement +1s         lin=0.703 mlp=0.632
+  [step20k] F pooled all -> ball rel pos +1s            lin=0.575
+  [step20k] E s9 tokens -> ball grounded <=1s           lin=0.712 mlp=0.711
+  [step20k] E s9 tokens -> ball impulse <=1s            lin=0.737 mlp=0.734
+  [step20k] E s9 tokens -> opp burns boost <=1s         lin=0.747 mlp=0.756
+  [step20k] E s9 tokens -> opp closer @+1s              lin=0.843 mlp=0.847
+  [step20k] E s9 tokens -> opp airborne @+1s            lin=0.849 mlp=0.864
+  [step20k] A s9 tokens -> SELF throttle+steer          lin=0.192 mlp=0.202
+  [step20k] A s9 tokens -> SELF boost held              lin=0.766 mlp=0.77
+  [step20k] A s9 tokens -> SELF jump held               lin=0.897 mlp=0.908
+  [step20k] A s9 tokens -> OPP throttle+steer           lin=0.108 rff=0.069 mlp=0.118
+  [step20k] A s9 tokens -> OPP boost held               lin=0.771 mlp=0.781
+  geometry: {"ctx_all": {"erank": 61.4, "top1_share": 0.079, "cos": 0.383, "dead_dims": 0.0}, "tgt_all": {"erank": 62.0, "top1_share": 0.079, "cos": 0.384, "dead_dims": 0.0}, "tgt_s9cat": {"erank": 69.5, "top1_share": 0.096, "cos": 0.533, "dead_dims": 0.0}, "maskball_pool": {"erank": 67.3, "top1_share": 0.068, "cos": 0.389, "dead_dims": 0.0}, "predball_s9": {"erank": 45.0, "top1_share": 0.118, "cos": 0.634, "
+
+=== step50k ===
+  [step50k] extracted in 12s
+  [step50k] D masked ball  -> ball rel pos @s9          lin=0.438 knn=0.368 rff=0.467 mlp=0.546
+  [step50k] D masked ball  -> ball rel vel @s9          lin=0.244 knn=0.189 rff=0.255 mlp=0.296
+  [step50k] D masked ball CAT -> ball rel pos           lin=0.667 mlp=0.689
+  [step50k] D masked opp   -> opp rel pos @s9           lin=0.574 knn=0.459 rff=0.592 mlp=0.674
+  [step50k] D masked opp   -> opp rel vel @s9           lin=0.383 knn=0.276 rff=0.39 mlp=0.454
+  [step50k] D masked opp CAT -> opp rel pos             lin=0.843 mlp=0.832
+  [step50k] D masked self  -> own boost                 lin=0.751 mlp=0.792
+  [step50k] D masked self CAT -> self loc vel           lin=0.796 mlp=0.815
+  [step50k] P predictor(ball) s9 -> ball rel pos        lin=0.47 mlp=0.508
+  [step50k] P predictor(ball) s5 -> ball rel pos@s5     lin=0.452
+  [step50k] P predictor(ball) s1 -> ball rel pos@s1     lin=0.591
+  [step50k] P predictor(opp) s9 -> opp rel pos          lin=0.801 mlp=0.81
+  [step50k] R car tokens -> ball rel pos (routing)      lin=0.395 knn=0.253 rff=0.415 mlp=0.509
+  [step50k] I ball token -> ball rel pos                lin=0.705
+  [step50k] I ball token -> ball rel vel                lin=0.599
+  [step50k] I opp token  -> opp rel pos                 lin=0.922
+  [step50k] I self token -> own boost                   lin=0.858
+  [step50k] I env token  -> secs remaining              lin=0.027
+  [step50k] I boost token -> 3 pad timers               lin=0.158
+  [step50k] F s9 tokens -> ball rel pos +0.4s           lin=0.923 mlp=0.718
+  [step50k] F s9 tokens -> ball rel pos +1s             lin=0.849 knn=0.329 rff=0.577 mlp=0.701
+  [step50k] F s9 tokens -> ball rel pos +2s             lin=0.696 mlp=0.624
+  [step50k] F s9 tokens -> ball loc vel +1s             lin=0.341 knn=0.19 rff=0.264 mlp=0.278
+  [step50k] F s9 tokens -> opp rel pos +1s              lin=0.918 mlp=0.892
+  [step50k] F s9 tokens -> own displacement +1s         lin=0.705 mlp=0.667
+  [step50k] F pooled all -> ball rel pos +1s            lin=0.412
+  [step50k] E s9 tokens -> ball grounded <=1s           lin=0.698 mlp=0.678
+  [step50k] E s9 tokens -> ball impulse <=1s            lin=0.733 mlp=0.729
+  [step50k] E s9 tokens -> opp burns boost <=1s         lin=0.746 mlp=0.749
+  [step50k] E s9 tokens -> opp closer @+1s              lin=0.785 mlp=0.784
+  [step50k] E s9 tokens -> opp airborne @+1s            lin=0.819 mlp=0.831
+  [step50k] A s9 tokens -> SELF throttle+steer          lin=0.175 mlp=0.195
+  [step50k] A s9 tokens -> SELF boost held              lin=0.77 mlp=0.783
+  [step50k] A s9 tokens -> SELF jump held               lin=0.901 mlp=0.923
+  [step50k] A s9 tokens -> OPP throttle+steer           lin=0.111 rff=0.081 mlp=0.123
+  [step50k] A s9 tokens -> OPP boost held               lin=0.825 mlp=0.828
+  geometry: {"ctx_all": {"erank": 61.3, "top1_share": 0.057, "cos": 0.423, "dead_dims": 0.0}, "tgt_all": {"erank": 61.0, "top1_share": 0.056, "cos": 0.42, "dead_dims": 0.0}, "tgt_s9cat": {"erank": 76.2, "top1_share": 0.063, "cos": 0.493, "dead_dims": 0.0}, "maskball_pool": {"erank": 66.8, "top1_share": 0.052, "cos": 0.529, "dead_dims": 0.0}, "predball_s9": {"erank": 44.6, "top1_share": 0.074, "cos": 0.469, "d
+
+=== collapse18450 ===
+  [collapse18450] extracted in 12s
+  [collapse18450] D masked ball  -> ball rel pos @s9          lin=0.514 knn=0.433 rff=0.542 mlp=0.565
+  [collapse18450] D masked ball  -> ball rel vel @s9          lin=0.268 knn=0.197 rff=0.277 mlp=0.309
+  [collapse18450] D masked ball CAT -> ball rel pos           lin=0.648 mlp=0.662
+  [collapse18450] D masked opp   -> opp rel pos @s9           lin=0.544 knn=0.453 rff=0.572 mlp=0.595
+  [collapse18450] D masked opp   -> opp rel vel @s9           lin=0.318 knn=0.226 rff=0.341 mlp=0.374
+  [collapse18450] D masked opp CAT -> opp rel pos             lin=0.73 mlp=0.729
+  [collapse18450] D masked self  -> own boost                 lin=0.632 mlp=0.663
+  [collapse18450] D masked self CAT -> self loc vel           lin=0.701 mlp=0.704
+  [collapse18450] P predictor(ball) s9 -> ball rel pos        lin=0.59 mlp=0.634
+  [collapse18450] P predictor(ball) s5 -> ball rel pos@s5     lin=0.58
+  [collapse18450] P predictor(ball) s1 -> ball rel pos@s1     lin=0.615
+  [collapse18450] P predictor(opp) s9 -> opp rel pos          lin=0.609 mlp=0.673
+  [collapse18450] R car tokens -> ball rel pos (routing)      lin=0.599 knn=0.546 rff=0.635 mlp=0.674
+  [collapse18450] I ball token -> ball rel pos                lin=0.883
+  [collapse18450] I ball token -> ball rel vel                lin=0.745
+  [collapse18450] I opp token  -> opp rel pos                 lin=0.917
+  [collapse18450] I self token -> own boost                   lin=0.866
+  [collapse18450] I env token  -> secs remaining              lin=0.214
+  [collapse18450] I boost token -> 3 pad timers               lin=0.11
+  [collapse18450] F s9 tokens -> ball rel pos +0.4s           lin=0.957 mlp=0.853
+  [collapse18450] F s9 tokens -> ball rel pos +1s             lin=0.881 knn=0.58 rff=0.707 mlp=0.794
+  [collapse18450] F s9 tokens -> ball rel pos +2s             lin=0.724 mlp=0.672
+  [collapse18450] F s9 tokens -> ball loc vel +1s             lin=0.377 knn=0.245 rff=0.296 mlp=0.31
+  [collapse18450] F s9 tokens -> opp rel pos +1s              lin=0.923 mlp=0.876
+  [collapse18450] F s9 tokens -> own displacement +1s         lin=0.735 mlp=0.672
+  [collapse18450] F pooled all -> ball rel pos +1s            lin=0.51
+  [collapse18450] E s9 tokens -> ball grounded <=1s           lin=0.774 mlp=0.743
+  [collapse18450] E s9 tokens -> ball impulse <=1s            lin=0.798 mlp=0.77
+  [collapse18450] E s9 tokens -> opp burns boost <=1s         lin=0.732 mlp=0.73
+  [collapse18450] E s9 tokens -> opp closer @+1s              lin=0.861 mlp=0.845
+  [collapse18450] E s9 tokens -> opp airborne @+1s            lin=0.852 mlp=0.848
+  [collapse18450] A s9 tokens -> SELF throttle+steer          lin=0.252 mlp=0.257
+  [collapse18450] A s9 tokens -> SELF boost held              lin=0.768 mlp=0.772
+  [collapse18450] A s9 tokens -> SELF jump held               lin=0.915 mlp=0.922
+  [collapse18450] A s9 tokens -> OPP throttle+steer           lin=0.1 rff=0.051 mlp=0.075
+  [collapse18450] A s9 tokens -> OPP boost held               lin=0.699 mlp=0.698
+  geometry: {"ctx_all": {"erank": 53.9, "top1_share": 0.074, "cos": 0.377, "dead_dims": 0.0}, "tgt_all": {"erank": 78.2, "top1_share": 0.051, "cos": 0.18, "dead_dims": 0.0}, "tgt_s9cat": {"erank": 76.7, "top1_share": 0.061, "cos": 0.454, "dead_dims": 0.0}, "maskball_pool": {"erank": 54.2, "top1_share": 0.075, "cos": 0.379, "dead_dims": 0.0}, "predball_s9": {"erank": 51.3, "top1_share": 0.079, "cos": 0.576, "d
+
+=== rand ===
+  [rand] extracted in 12s
+  [rand] D masked ball  -> ball rel pos @s9          lin=0.279 knn=0.118 rff=0.279 mlp=0.278
+  [rand] D masked ball  -> ball rel vel @s9          lin=0.153 knn=0.034 rff=0.126 mlp=0.131
+  [rand] D masked ball CAT -> ball rel pos           lin=0.509 mlp=0.572
+  [rand] D masked opp   -> opp rel pos @s9           lin=0.387 knn=0.17 rff=0.348 mlp=0.351
+  [rand] D masked opp   -> opp rel vel @s9           lin=0.221 knn=0.057 rff=0.173 mlp=0.175
+  [rand] D masked opp CAT -> opp rel pos             lin=0.565 mlp=0.619
+  [rand] D masked self  -> own boost                 lin=0.512 mlp=0.464
+  [rand] D masked self CAT -> self loc vel           lin=0.566 mlp=0.679
+  [rand] P predictor(ball) s9 -> ball rel pos        lin=0.223 mlp=0.268
+  [rand] P predictor(ball) s5 -> ball rel pos@s5     lin=0.311
+  [rand] P predictor(ball) s1 -> ball rel pos@s1     lin=0.47
+  [rand] P predictor(opp) s9 -> opp rel pos          lin=0.324 mlp=0.344
+  [rand] R car tokens -> ball rel pos (routing)      lin=0.538 knn=0.141 rff=0.426 mlp=0.446
+  [rand] I ball token -> ball rel pos                lin=1.0
+  [rand] I ball token -> ball rel vel                lin=1.0
+  [rand] I opp token  -> opp rel pos                 lin=0.995
+  [rand] I self token -> own boost                   lin=0.998
+  [rand] I env token  -> secs remaining              lin=1.0
+  [rand] I boost token -> 3 pad timers               lin=0.927
+  [rand] F s9 tokens -> ball rel pos +0.4s           lin=0.986 mlp=0.976
+  [rand] F s9 tokens -> ball rel pos +1s             lin=0.901 knn=0.502 rff=0.868 mlp=0.901
+  [rand] F s9 tokens -> ball rel pos +2s             lin=0.73 mlp=0.748
+  [rand] F s9 tokens -> ball loc vel +1s             lin=0.367 knn=0.248 rff=0.365 mlp=0.374
+  [rand] F s9 tokens -> opp rel pos +1s              lin=0.945 mlp=0.939
+  [rand] F s9 tokens -> own displacement +1s         lin=0.752 mlp=0.73
+  [rand] F pooled all -> ball rel pos +1s            lin=0.469
+  [rand] E s9 tokens -> ball grounded <=1s           lin=0.768 mlp=0.826
+  [rand] E s9 tokens -> ball impulse <=1s            lin=0.81 mlp=0.833
+  [rand] E s9 tokens -> opp burns boost <=1s         lin=0.714 mlp=0.748
+  [rand] E s9 tokens -> opp closer @+1s              lin=0.81 mlp=0.909
+  [rand] E s9 tokens -> opp airborne @+1s            lin=0.832 mlp=0.88
+  [rand] A s9 tokens -> SELF throttle+steer          lin=0.22 mlp=0.261
+  [rand] A s9 tokens -> SELF boost held              lin=0.75 mlp=0.768
+  [rand] A s9 tokens -> SELF jump held               lin=0.897 mlp=0.918
+  [rand] A s9 tokens -> OPP throttle+steer           lin=0.134 rff=0.138 mlp=0.179
+  [rand] A s9 tokens -> OPP boost held               lin=0.701 mlp=0.725
+  geometry: {"ctx_all": {"erank": 26.9, "top1_share": 0.133, "cos": 0.999, "dead_dims": 0.0}, "tgt_all": {"erank": 26.9, "top1_share": 0.133, "cos": 0.999, "dead_dims": 0.0}, "tgt_s9cat": {"erank": 39.4, "top1_share": 0.105, "cos": 0.995, "dead_dims": 0.0}, "maskball_pool": {"erank": 22.6, "top1_share": 0.159, "cos": 0.999, "dead_dims": 0.0}, "predball_s9": {"erank": 23.4, "top1_share": 0.162, "cos": 1.0, "de
+
+=== raw control ===
+  [raw] masked ball  -> ball rel pos @s9           lin=0.193 mlp=0.331
+  [raw] masked ball  -> ball rel vel @s9           lin=0.102 mlp=0.176
+  [raw] masked ball CAT -> ball rel pos            lin=0.193 mlp=0.331
+  [raw] masked opp   -> opp rel pos @s9            lin=0.221 mlp=0.443
+  [raw] masked opp   -> opp rel vel @s9            lin=0.121 mlp=0.263
+  [raw] masked opp CAT -> opp rel pos              lin=0.221 mlp=0.443
+  [raw] masked self  -> own boost                  lin=0.671 mlp=0.678
+  [raw] masked self CAT -> self loc vel            lin=0.046 mlp=0.041
+  [raw] predictor(ball) s9 -> ball rel pos         lin=0.193 mlp=0.331
+  [raw] predictor(ball) s5 -> ball rel pos@s5      lin=0.25 mlp=None
+  [raw] predictor(ball) s1 -> ball rel pos@s1      lin=0.273 mlp=None
+  [raw] predictor(opp) s9 -> opp rel pos           lin=0.221 mlp=0.443
+  [raw] car tokens -> ball rel pos (routing)       lin=0.24 mlp=0.474
+  [raw] ball token -> ball rel pos                 lin=0.24 mlp=None
+  [raw] ball token -> ball rel vel                 lin=0.18 mlp=None
+  [raw] opp token  -> opp rel pos                  lin=0.241 mlp=None
+  [raw] self token -> own boost                    lin=1.0 mlp=None
+  [raw] env token  -> secs remaining               lin=1.0 mlp=None
+  [raw] boost token -> 3 pad timers                lin=1.0 mlp=None
+  [raw] s9 tokens -> ball rel pos +0.4s            lin=0.223 mlp=0.471
+  [raw] s9 tokens -> ball rel pos +1s              lin=0.202 mlp=0.462
+  [raw] s9 tokens -> ball rel pos +2s              lin=0.176 mlp=0.432
+  [raw] s9 tokens -> ball loc vel +1s              lin=0.092 mlp=0.168
+  [raw] s9 tokens -> opp rel pos +1s               lin=0.21 mlp=0.56
+  [raw] s9 tokens -> own displacement +1s          lin=0.294 mlp=0.382
+  [raw] pooled all -> ball rel pos +1s             lin=0.202 mlp=None
+  [raw] s9 tokens -> ball grounded <=1s            lin=0.855 mlp=0.849
+  [raw] s9 tokens -> ball impulse <=1s             lin=0.781 mlp=0.882
+  [raw] s9 tokens -> opp burns boost <=1s          lin=0.709 mlp=0.729
+  [raw] s9 tokens -> opp closer @+1s               lin=0.701 mlp=0.798
+  [raw] s9 tokens -> opp airborne @+1s             lin=0.896 mlp=0.916
+  [raw] s9 tokens -> SELF throttle+steer           lin=0.145 mlp=0.146
+  [raw] s9 tokens -> SELF boost held               lin=0.747 mlp=0.713
+  [raw] s9 tokens -> SELF jump held                lin=0.903 mlp=0.906
+  [raw] s9 tokens -> OPP throttle+steer            lin=0.146 mlp=0.142
+  [raw] s9 tokens -> OPP boost held                lin=0.754 mlp=0.72
+
+CKA(tgt_all):
+  step5k          1.000 0.187 0.135 0.113 0.167
+  step20k         0.187 1.000 0.624 0.497 0.490
+  step50k         0.135 0.624 1.000 0.438 0.435
+  collapse18450   0.113 0.497 0.438 1.000 0.424
+  rand            0.167 0.490 0.435 0.424 1.000
+
+done in 4.9 min -> C:\Users\charl\R-JEPA2\probing\suite_results

@@ -1,0 +1,165 @@
+[
+  {
+    "tier": "L1",
+    "probe": "ball token -> ball rel pos (now)",
+    "target": "ball_rel_now",
+    "jepa_lin": 0.695,
+    "jepapre_lin": 0.704,
+    "rand_lin": 1.0,
+    "raw_lin": 0.244
+  },
+  {
+    "tier": "L1",
+    "probe": "self token -> own boost (now)",
+    "target": "self_boost",
+    "jepa_lin": 0.858,
+    "jepapre_lin": 0.862,
+    "rand_lin": 0.998,
+    "raw_lin": 1.0
+  },
+  {
+    "tier": "L2",
+    "probe": "car tokens -> ball rel pos (now)",
+    "target": "ball_rel_now",
+    "jepa_lin": 0.384,
+    "jepa_mlp": 0.565,
+    "jepapre_lin": 0.407,
+    "rand_lin": 0.532,
+    "rand_mlp": 0.52,
+    "raw_lin": 0.244
+  },
+  {
+    "tier": "L3",
+    "probe": "ball MASKED -> ball rel pos (now)",
+    "target": "ball_rel_now",
+    "jepa_lin": 0.432,
+    "jepa_mlp": 0.589,
+    "jepapre_lin": 0.432,
+    "rand_lin": 0.283,
+    "rand_mlp": 0.313,
+    "raw_lin": 0.2
+  },
+  {
+    "tier": "L3",
+    "probe": "ball MASKED -> ball rel vel (now)",
+    "target": "ball_relvel_now",
+    "jepa_lin": 0.237,
+    "jepa_mlp": 0.301,
+    "jepapre_lin": 0.24,
+    "rand_lin": 0.151,
+    "rand_mlp": 0.146,
+    "raw_lin": 0.111
+  },
+  {
+    "tier": "L3",
+    "probe": "opp MASKED  -> opp rel pos (now)",
+    "target": "opp_rel_now",
+    "jepa_lin": 0.573,
+    "jepa_mlp": 0.721,
+    "jepapre_lin": 0.567,
+    "rand_lin": 0.381,
+    "rand_mlp": 0.385,
+    "raw_lin": 0.227
+  },
+  {
+    "tier": "L3",
+    "probe": "opp MASKED  -> opp rel vel (now)",
+    "target": "opp_relvel_now",
+    "jepa_lin": 0.386,
+    "jepa_mlp": 0.49,
+    "jepapre_lin": 0.386,
+    "rand_lin": 0.224,
+    "rand_mlp": 0.209,
+    "raw_lin": 0.15
+  },
+  {
+    "tier": "L4",
+    "probe": "s9 tokens -> ball rel pos +0.5s",
+    "target": "ball_rel_05s",
+    "jepa_lin": 0.811,
+    "jepa_mlp": 0.756,
+    "jepapre_lin": 0.816,
+    "rand_lin": 0.864,
+    "rand_mlp": 0.876,
+    "raw_lin": 0.248
+  },
+  {
+    "tier": "L4",
+    "probe": "s9 tokens -> ball rel pos +1s",
+    "target": "ball_rel_1s",
+    "jepa_lin": 0.656,
+    "jepa_mlp": 0.633,
+    "jepapre_lin": 0.66,
+    "rand_lin": 0.688,
+    "rand_mlp": 0.715,
+    "raw_lin": 0.208
+  },
+  {
+    "tier": "L4",
+    "probe": "s9 tokens -> ball local vel +1s",
+    "target": "ballvel_rel_1s",
+    "jepa_lin": 0.25,
+    "jepa_mlp": 0.224,
+    "jepapre_lin": 0.253,
+    "rand_lin": 0.266,
+    "rand_mlp": 0.269,
+    "raw_lin": 0.065
+  },
+  {
+    "tier": "L5",
+    "probe": "s9 tokens -> opp rel pos +0.5s",
+    "target": "opp_rel_05s",
+    "jepa_lin": 0.889,
+    "jepa_mlp": 0.893,
+    "jepapre_lin": 0.89,
+    "rand_lin": 0.915,
+    "rand_mlp": 0.924,
+    "raw_lin": 0.204
+  },
+  {
+    "tier": "L5",
+    "probe": "s9 tokens -> opp rel pos +1s",
+    "target": "opp_rel_1s",
+    "jepa_lin": 0.734,
+    "jepa_mlp": 0.737,
+    "jepapre_lin": 0.735,
+    "rand_lin": 0.758,
+    "rand_mlp": 0.774,
+    "raw_lin": 0.183
+  },
+  {
+    "tier": "L5",
+    "probe": "s9 tokens -> own displacement +1s",
+    "target": "self_disp_1s",
+    "jepa_lin": 0.578,
+    "jepa_mlp": 0.591,
+    "jepapre_lin": 0.579,
+    "rand_lin": 0.605,
+    "rand_mlp": 0.642,
+    "raw_lin": 0.274
+  },
+  {
+    "tier": "L5",
+    "probe": "all tokens -> ball grounded in 1s",
+    "target": "ball_ground_1s",
+    "base_rate": 0.527,
+    "jepa_lin": 0.625,
+    "jepa_mlp": 0.631,
+    "jepapre_lin": 0.626,
+    "rand_lin": 0.674,
+    "rand_mlp": 0.686,
+    "raw_lin": 0.779
+  },
+  {
+    "tier": "L5",
+    "probe": "all tokens -> opp burns boost 1s",
+    "target": "opp_boost_1s",
+    "base_rate": 0.503,
+    "jepa_lin": 0.772,
+    "jepa_mlp": 0.791,
+    "jepapre_lin": 0.774,
+    "rand_lin": 0.748,
+    "rand_mlp": 0.771,
+    "raw_lin": 0.783
+  }
+]
