@@ -55,6 +55,8 @@ class Transformer(nn.Module):
         if proj is not False:
             self.mask_token = nn.Parameter(torch.zeros(1, residual_dim))
             self.out_proj = nn.Linear(self.dim, self.dim)
+            nn.init.eye_(self.out_proj.weight)
+            nn.init.zeros_(self.out_proj.bias)
 
         # Depth-dependent residual rescaling (BEiT/DINO/MAE, carried into I-JEPA &
         # V-JEPA). Every residual branch pours variance into the stream, so left
