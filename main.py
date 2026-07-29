@@ -6,6 +6,7 @@ import torch
 from jepa import JEPA
 from training.loader import build_window_loader
 from training.training_loop import train
+from training.functions import param_groups
 
 from pathlib import Path
 
@@ -77,7 +78,7 @@ if __name__ == '__main__':
 
     R_JEPA.to(DEVICE)
 
-    optim = torch.optim.AdamW(R_JEPA.parameters(), lr=LR[0], weight_decay=WEIGHT_DECAY[0], eps=1e-6)
+    optim = torch.optim.AdamW(param_groups(R_JEPA, WEIGHT_DECAY[0]), lr=LR[0], eps=1e-6)
 
     try:
         train(R_JEPA, loader, optim, lr=LR, warmup_steps=WARMUP_STEPS, wd=WEIGHT_DECAY,

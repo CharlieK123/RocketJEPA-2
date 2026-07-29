@@ -112,7 +112,11 @@ def train(model, loader, optim, lr, warmup_steps, wd, device='cuda',
                 # warmup+cosine LR and cosine-up weight-decay, set before the optimizer step
                 for g in optim.param_groups:
                     g["lr"] = lr_schedule(step, lr, warmup_steps)
-                    g["weight_decay"] = wd_schedule(step, wd, lr[3])
+                    # WD_exclude groups (LN gains, biases, mask token) keep wd=0 —
+                    # the scheduler must not overwrite them. Mirrors V-JEPA's
+                    # CosineWDSchedule.step (src/utils/schedulers.py:73-75).
+                    if not g.get("WD_exclude", False):
+                        g["weight_decay"] = wd_schedule(step, wd, lr[3])
 
                 optim.zero_grad(set_to_none=True)
                 loss.backward()
