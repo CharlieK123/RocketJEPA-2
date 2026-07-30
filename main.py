@@ -13,10 +13,10 @@ DATA_DIR = Path("/workspace/data/shards_75k")
 
 LR = (1.5e-4, 4e-4, 1e-5, 100_000)   # start, peak, final, total
 WARMUP_STEPS = 7_000               # keep
-WEIGHT_DECAY = (0.04, 0.4)   # (start, final) cosine-ramped UP over LR[3] steps (V-JEPA style)
+WEIGHT_DECAY = (0.01, 0.1)   # (start, final) cosine-ramped UP over LR[3] steps (V-JEPA style)
 SHARDS        = str(DATA_DIR)   # <- point at your local shard directory
 WINDOW        = 15
-BATCH_SIZE    = 2500
+BATCH_SIZE    = 2048
 EPOCHS        = 100
 NUM_WORKERS   = 4
 DEVICE        = "cuda" if torch.cuda.is_available() else "cpu"
@@ -27,8 +27,8 @@ GAP = 2
 # JSON-serializable so it can be dumped to config.json and stamped into every
 # checkpoint; mask_probs is converted to a tensor at model construction.
 MODEL_CFG = dict(
-        latent_dim=384,
-        encoder_blocks=10,
+        latent_dim=256,
+        encoder_blocks=6,
         encoder_hdim=1024,
         encoder_attheads=4,
         proj_blocks=4,
@@ -36,7 +36,7 @@ MODEL_CFG = dict(
         proj_attheads=4,
         momentum=(0.998, 1.0, LR[3]),   # anneal over the whole run, in lockstep with the LR
         obj_lengths=(19, 19, 9, 7, 170),
-        emb_hdim=512,
+        emb_hdim=256,
         mask_probs=[0.10, 0.35, 0.45, 0.05, 0.05],
 )
 
@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
     loader, ds = build_window_loader(
             SHARDS, window=WINDOW, batch_size=BATCH_SIZE, num_workers=NUM_WORKERS,
-            pad_state=True, normalize="physical", mirror=MIRROR, gap=GAP
+            pad_state=True, normalize="physical", mirror=MIRROR, gap=GAP, step=10
 
         )
 
@@ -85,3 +85,4 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         # train() already saved rjepa_interrupt_step{N}.pt (with step + train time) on its way out
         print("exiting.")
+
