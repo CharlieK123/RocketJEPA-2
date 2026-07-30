@@ -10,7 +10,7 @@ from training.functions import (
     explain_collapse,
 )
 
-EPOCHS = 1
+EPOCHS = 100
 
 # --- early-warning thresholds for auto-snapshotting around a sudden collapse ---
 # Collapse here is abrupt and at a non-repeatable step, so we can't pre-place a
