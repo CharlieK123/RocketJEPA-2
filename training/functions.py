@@ -366,3 +366,58 @@ def collapse_metrics(rep):
     d = rep.std(0)
     dead = (d < 0.01 * d.mean()).float().mean().item()
     return erank, cos, vstd, dead
+
+
+def param_groups(model, weight_decay):
+    """AdamW param groups with weight decay applied ONLY to weight matrices.
+
+    Two things this fixes vs. passing model.parameters() as one flat group:
+
+    1. The TARGET ENCODER is excluded entirely. It is EMA-updated, never
+       gradient-updated, so it has no business in the optimizer. Currently
+       harmless (AdamW skips grad=None params) but it is 14.9M params in the
+       optimizer's param list and a live footgun if anything ever unfreezes it.
+
+    2. 1-D params (every LayerNorm gain/bias, every Linear/MHA bias) and the
+       mask token are put in a wd=0 group. The loss is computed on affine-free
+       LayerNorm'd outputs, so it exerts NO restoring force on scale -- decay on
+       the LN gains is therefore unopposed. It shrinks every residual branch's
+       contribution while out_norm re-inflates whatever is left back to unit
+       scale, hiding the shrinkage from the loss and amplifying the surviving
+       direction. That is the pn_enc/pn_tgt scale-death mode. Over this run the
+       integrated lr*wd is ~2.97, i.e. an unopposed param decays to ~5% of its
+       init, peaking around step 48k.
+
+    Matches V-JEPA's init_opt (app/vjepa/utils.py:173-194), which puts biases and
+    len(shape)==1 params in wd=0 groups flagged 'WD_exclude' and passes only the
+    encoder + predictor to AdamW.
+
+    NOTE on the mask token: V-JEPA's shape heuristic (len(p.shape) != 1) happens
+    to send its [1,1,D] mask tokens to the DECAY group. Ours is [1,D], so the same
+    heuristic would decay it too. We exclude it by name instead, following the
+    MAE/timm convention of leaving token-like params (cls_token, pos_embed,
+    mask_token) undecayed -- they are learned additive offsets, not weight
+    matrices. Delete the `or "mask_token" in name` clause to match V-JEPA exactly.
+
+    The 'WD_exclude' flag is what the scheduler in training_loop reads to know it
+    must not overwrite this group's weight_decay each step.
+    """
+    decay, no_decay = [], []
+    for module in (model.encoder, model.predictor):   # target_encoder: EMA-only
+        for name, p in module.named_parameters():
+            if not p.requires_grad:
+                continue
+            if p.ndim <= 1 or name.endswith("bias") or "mask_token" in name:
+                no_decay.append(p)
+            else:
+                decay.append(p)
+
+    n_d = sum(p.numel() for p in decay)
+    n_n = sum(p.numel() for p in no_decay)
+    print(f"optim groups — decay: {len(decay)} tensors / {n_d:,} params | "
+          f"no-decay: {len(no_decay)} tensors / {n_n:,} params")
+
+    return [
+        {"params": decay, "weight_decay": weight_decay},
+        {"params": no_decay, "weight_decay": 0.0, "WD_exclude": True},
+    ]

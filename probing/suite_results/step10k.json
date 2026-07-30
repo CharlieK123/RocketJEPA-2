@@ -1,0 +1,780 @@
+{
+ "model": "step10k",
+ "ckpt": "C:\\Users\\charl\\R-JEPA2\\checkpoints\\20260728-153023\\rjepa_step10k.pt",
+ "n_train": 24000,
+ "n_val": 8000,
+ "geometry": {
+  "ctx_all": {
+   "erank": 71.1,
+   "top1_share": 0.058,
+   "cos": 0.239,
+   "dead_dims": 0.0
+  },
+  "tgt_all": {
+   "erank": 70.8,
+   "top1_share": 0.058,
+   "cos": 0.237,
+   "dead_dims": 0.0
+  },
+  "tgt_s9cat": {
+   "erank": 48.4,
+   "top1_share": 0.118,
+   "cos": 0.413,
+   "dead_dims": 0.0
+  },
+  "maskball_pool": {
+   "erank": 76.6,
+   "top1_share": 0.056,
+   "cos": 0.207,
+   "dead_dims": 0.0
+  },
+  "predball_s9": {
+   "erank": 33.6,
+   "top1_share": 0.131,
+   "cos": 0.486,
+   "dead_dims": 0.0
+  },
+  "tgt_cars": {
+   "erank": 73.8,
+   "top1_share": 0.058,
+   "cos": 0.275,
+   "dead_dims": 0.0
+  },
+  "per_object_token_erank": {
+   "self": 46.1,
+   "opp": 39.3,
+   "ball": 36.8,
+   "env": 34.0,
+   "boost": 41.7
+  },
+  "prenorm_rms": {
+   "ctx": 1.221,
+   "tgt": 1.216
+  },
+  "pred_latcos_per_state": {
+   "ball": [
+    0.992,
+    0.993,
+    0.993,
+    0.992,
+    0.991,
+    0.99,
+    0.989,
+    0.989,
+    0.99
+   ],
+   "opp": [
+    0.985,
+    0.986,
+    0.985,
+    0.984,
+    0.983,
+    0.982,
+    0.979,
+    0.978,
+    0.979
+   ],
+   "self": [
+    0.987,
+    0.988,
+    0.987,
+    0.988,
+    0.988,
+    0.988,
+    0.986,
+    0.983,
+    0.984
+   ]
+  },
+  "pred_sl1": {
+   "ball": 0.0092,
+   "opp": 0.0176,
+   "self": 0.0134
+  },
+  "copy_latcos": {
+   "ball": [
+    0.648,
+    0.224,
+    0.143,
+    0.203,
+    0.268,
+    0.272,
+    0.239,
+    0.194,
+    0.169
+   ],
+   "opp": [
+    0.698,
+    0.34,
+    0.213,
+    0.224,
+    0.267,
+    0.277,
+    0.269,
+    0.244,
+    0.203
+   ],
+   "self": [
+    0.674,
+    0.245,
+    0.113,
+    0.17,
+    0.221,
+    0.194,
+    0.126,
+    0.037,
+    0.023
+   ]
+  },
+  "mean_latcos": {
+   "ball": [
+    0.608,
+    0.622,
+    0.653,
+    0.673,
+    0.679,
+    0.664,
+    0.663,
+    0.714,
+    0.692
+   ],
+   "opp": [
+    0.621,
+    0.64,
+    0.664,
+    0.677,
+    0.686,
+    0.669,
+    0.677,
+    0.719,
+    0.691
+   ],
+   "self": [
+    0.586,
+    0.554,
+    0.593,
+    0.629,
+    0.637,
+    0.599,
+    0.564,
+    0.556,
+    0.549
+   ]
+  },
+  "shuf_latcos": {
+   "ball": [
+    0.382,
+    0.402,
+    0.441,
+    0.467,
+    0.476,
+    0.455,
+    0.454,
+    0.527,
+    0.497
+   ],
+   "opp": [
+    0.405,
+    0.431,
+    0.462,
+    0.478,
+    0.49,
+    0.467,
+    0.482,
+    0.545,
+    0.504
+   ],
+   "self": [
+    0.354,
+    0.32,
+    0.365,
+    0.408,
+    0.418,
+    0.37,
+    0.33,
+    0.325,
+    0.319
+   ]
+  }
+ },
+ "probes": [
+  {
+   "tier": "D",
+   "probe": "masked ball  -> ball rel pos @s9",
+   "pool": "maskball_pool",
+   "target": "ball_rel_now",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.53,
+   "lin_sec": 0.1,
+   "knn": 0.383,
+   "knn_sec": 0.1,
+   "rff": 0.56,
+   "rff_sec": 0.3,
+   "mlp": 0.626,
+   "mlp_sec": 0.4
+  },
+  {
+   "tier": "D",
+   "probe": "masked ball  -> ball rel vel @s9",
+   "pool": "maskball_pool",
+   "target": "ball_relvel_now",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.313,
+   "lin_sec": 0.1,
+   "knn": 0.209,
+   "knn_sec": 0.0,
+   "rff": 0.314,
+   "rff_sec": 0.2,
+   "mlp": 0.353,
+   "mlp_sec": 0.4
+  },
+  {
+   "tier": "D",
+   "probe": "masked ball CAT -> ball rel pos",
+   "pool": "maskball_cat",
+   "target": "ball_rel_now",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.697,
+   "lin_sec": 0.4,
+   "mlp": 0.708,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "D",
+   "probe": "masked opp   -> opp rel pos @s9",
+   "pool": "maskopp_pool",
+   "target": "opp_rel_now",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.588,
+   "lin_sec": 0.1,
+   "knn": 0.45,
+   "knn_sec": 0.0,
+   "rff": 0.614,
+   "rff_sec": 0.2,
+   "mlp": 0.668,
+   "mlp_sec": 0.4
+  },
+  {
+   "tier": "D",
+   "probe": "masked opp   -> opp rel vel @s9",
+   "pool": "maskopp_pool",
+   "target": "opp_relvel_now",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.364,
+   "lin_sec": 0.1,
+   "knn": 0.257,
+   "knn_sec": 0.0,
+   "rff": 0.376,
+   "rff_sec": 0.2,
+   "mlp": 0.414,
+   "mlp_sec": 0.4
+  },
+  {
+   "tier": "D",
+   "probe": "masked opp CAT -> opp rel pos",
+   "pool": "maskopp_cat",
+   "target": "opp_rel_now",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.77,
+   "lin_sec": 0.4,
+   "mlp": 0.768,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "D",
+   "probe": "masked self  -> own boost",
+   "pool": "maskself_pool",
+   "target": "self_boost",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.746,
+   "lin_sec": 0.1,
+   "mlp": 0.764,
+   "mlp_sec": 0.4
+  },
+  {
+   "tier": "D",
+   "probe": "masked self CAT -> self loc vel",
+   "pool": "maskself_cat",
+   "target": "self_locvel_now",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.699,
+   "lin_sec": 0.4,
+   "mlp": 0.7,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "P",
+   "probe": "predictor(ball) s9 -> ball rel pos",
+   "pool": "predball_s9",
+   "target": "ball_rel_now",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.72,
+   "lin_sec": 0.1,
+   "mlp": 0.717,
+   "mlp_sec": 0.4
+  },
+  {
+   "tier": "P",
+   "probe": "predictor(ball) s5 -> ball rel pos@s5",
+   "pool": "predball_s5",
+   "target": "ball_rel_s5",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.782,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "P",
+   "probe": "predictor(ball) s1 -> ball rel pos@s1",
+   "pool": "predball_s1",
+   "target": "ball_rel_s1",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.856,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "P",
+   "probe": "predictor(opp) s9 -> opp rel pos",
+   "pool": "predopp_s9",
+   "target": "opp_rel_now",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.753,
+   "lin_sec": 0.1,
+   "mlp": 0.758,
+   "mlp_sec": 0.4
+  },
+  {
+   "tier": "P",
+   "probe": "predictor(opp) s5 -> opp rel pos@s5",
+   "pool": "predopp_s5",
+   "target": "opp_rel_s5",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.818,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "P",
+   "probe": "predictor(opp) s1 -> opp rel pos@s1",
+   "pool": "predopp_s1",
+   "target": "opp_rel_s1",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.865,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "P",
+   "probe": "predictor(ball) s9 -> ball rel vel",
+   "pool": "predball_s9",
+   "target": "ball_relvel_now",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.406,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "C",
+   "probe": "TARGET ball s1 -> ball rel pos@s1",
+   "pool": "tgt_ball1",
+   "target": "ball_rel_s1",
+   "kind": "reg",
+   "status": "ceiling",
+   "lin": 0.902,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "C",
+   "probe": "TARGET ball s5 -> ball rel pos@s5",
+   "pool": "tgt_ball5",
+   "target": "ball_rel_s5",
+   "kind": "reg",
+   "status": "ceiling",
+   "lin": 0.881,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "C",
+   "probe": "TARGET opp s1  -> opp rel pos@s1",
+   "pool": "tgt_opp1",
+   "target": "opp_rel_s1",
+   "kind": "reg",
+   "status": "ceiling",
+   "lin": 0.912,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "C",
+   "probe": "TARGET opp s5  -> opp rel pos@s5",
+   "pool": "tgt_opp5",
+   "target": "opp_rel_s5",
+   "kind": "reg",
+   "status": "ceiling",
+   "lin": 0.911,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "R",
+   "probe": "car tokens -> ball rel pos (routing)",
+   "pool": "tgt_cars",
+   "target": "ball_rel_now",
+   "kind": "reg",
+   "status": "direct",
+   "lin": 0.651,
+   "lin_sec": 0.1,
+   "knn": 0.355,
+   "knn_sec": 0.0,
+   "rff": 0.682,
+   "rff_sec": 0.2,
+   "mlp": 0.767,
+   "mlp_sec": 0.4
+  },
+  {
+   "tier": "I",
+   "probe": "ball token -> ball rel pos",
+   "pool": "tgt_ball9",
+   "target": "ball_rel_now",
+   "kind": "reg",
+   "status": "sanity",
+   "lin": 0.926,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "I",
+   "probe": "ball token -> ball rel vel",
+   "pool": "tgt_ball9",
+   "target": "ball_relvel_now",
+   "kind": "reg",
+   "status": "sanity",
+   "lin": 0.908,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "I",
+   "probe": "opp token  -> opp rel pos",
+   "pool": "tgt_opp9",
+   "target": "opp_rel_now",
+   "kind": "reg",
+   "status": "sanity",
+   "lin": 0.928,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "I",
+   "probe": "self token -> own boost",
+   "pool": "tgt_self9",
+   "target": "self_boost",
+   "kind": "reg",
+   "status": "sanity",
+   "lin": 0.927,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "I",
+   "probe": "env token  -> secs remaining",
+   "pool": "tgt_env9",
+   "target": "env_secs",
+   "kind": "reg",
+   "status": "sanity",
+   "lin": 0.871,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "I",
+   "probe": "boost token -> 3 pad timers",
+   "pool": "tgt_boost9",
+   "target": "pads3",
+   "kind": "reg",
+   "status": "sanity",
+   "lin": 0.136,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "F",
+   "probe": "s9 tokens -> ball rel pos +0.4s",
+   "pool": "tgt_s9cat",
+   "target": "ball_rel_04",
+   "kind": "reg",
+   "status": "transfer",
+   "lin": 0.96,
+   "lin_sec": 0.4,
+   "mlp": 0.901,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "F",
+   "probe": "s9 tokens -> ball rel pos +1s",
+   "pool": "tgt_s9cat",
+   "target": "ball_rel_1s",
+   "kind": "reg",
+   "status": "transfer",
+   "lin": 0.879,
+   "lin_sec": 0.4,
+   "knn": 0.411,
+   "knn_sec": 0.2,
+   "rff": 0.791,
+   "rff_sec": 0.5,
+   "mlp": 0.84,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "F",
+   "probe": "s9 tokens -> ball rel pos +2s",
+   "pool": "tgt_s9cat",
+   "target": "ball_rel_2s",
+   "kind": "reg",
+   "status": "transfer",
+   "lin": 0.721,
+   "lin_sec": 0.4,
+   "mlp": 0.699,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "F",
+   "probe": "s9 tokens -> ball loc vel +1s",
+   "pool": "tgt_s9cat",
+   "target": "ballvel_loc_1s",
+   "kind": "reg",
+   "status": "transfer",
+   "lin": 0.364,
+   "lin_sec": 0.4,
+   "knn": 0.216,
+   "knn_sec": 0.2,
+   "rff": 0.311,
+   "rff_sec": 0.5,
+   "mlp": 0.298,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "F",
+   "probe": "s9 tokens -> opp rel pos +1s",
+   "pool": "tgt_s9cat",
+   "target": "opp_rel_1s",
+   "kind": "reg",
+   "status": "transfer",
+   "lin": 0.92,
+   "lin_sec": 0.4,
+   "mlp": 0.851,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "F",
+   "probe": "s9 tokens -> own displacement +1s",
+   "pool": "tgt_s9cat",
+   "target": "self_disp_1s",
+   "kind": "reg",
+   "status": "transfer",
+   "lin": 0.712,
+   "lin_sec": 0.4,
+   "mlp": 0.633,
+   "mlp_sec": 1.0
+  },
+  {
+   "tier": "F",
+   "probe": "pooled all -> ball rel pos +1s",
+   "pool": "tgt_all",
+   "target": "ball_rel_1s",
+   "kind": "reg",
+   "status": "transfer",
+   "lin": 0.579,
+   "lin_sec": 0.1
+  },
+  {
+   "tier": "E",
+   "probe": "s9 tokens -> ball grounded <=1s",
+   "pool": "tgt_s9cat",
+   "target": "ball_ground_1s",
+   "kind": "cls",
+   "status": "transfer",
+   "base_rate": 0.38,
+   "lin": 0.753,
+   "lin_sec": 0.6,
+   "mlp": 0.764,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "E",
+   "probe": "s9 tokens -> ball impulse <=1s",
+   "pool": "tgt_s9cat",
+   "target": "ball_impulse_1s",
+   "kind": "cls",
+   "status": "transfer",
+   "base_rate": 0.963,
+   "lin": 0.794,
+   "lin_sec": 0.6,
+   "mlp": 0.761,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "E",
+   "probe": "s9 tokens -> opp burns boost <=1s",
+   "pool": "tgt_s9cat",
+   "target": "opp_burn_1s",
+   "kind": "cls",
+   "status": "transfer",
+   "base_rate": 0.425,
+   "lin": 0.736,
+   "lin_sec": 0.6,
+   "mlp": 0.741,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "E",
+   "probe": "s9 tokens -> opp closer @+1s",
+   "pool": "tgt_s9cat",
+   "target": "opp_closer_1s",
+   "kind": "cls",
+   "status": "transfer",
+   "base_rate": 0.502,
+   "lin": 0.835,
+   "lin_sec": 0.6,
+   "mlp": 0.84,
+   "mlp_sec": 0.8
+  },
+  {
+   "tier": "E",
+   "probe": "s9 tokens -> opp airborne @+1s",
+   "pool": "tgt_s9cat",
+   "target": "opp_air_1s",
+   "kind": "cls",
+   "status": "transfer",
+   "base_rate": 0.101,
+   "lin": 0.84,
+   "lin_sec": 0.6,
+   "mlp": 0.848,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "A",
+   "probe": "s9 tokens -> SELF throttle+steer",
+   "pool": "tgt_s9cat",
+   "target": "self_thrsteer",
+   "kind": "reg",
+   "status": "transfer",
+   "lin": 0.226,
+   "lin_sec": 0.4,
+   "mlp": 0.234,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "A",
+   "probe": "s9 tokens -> SELF boost held",
+   "pool": "tgt_s9cat",
+   "target": "self_boostbtn",
+   "kind": "cls",
+   "status": "transfer",
+   "base_rate": 0.219,
+   "lin": 0.771,
+   "lin_sec": 0.6,
+   "mlp": 0.779,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "A",
+   "probe": "s9 tokens -> SELF jump held",
+   "pool": "tgt_s9cat",
+   "target": "self_jump",
+   "kind": "cls",
+   "status": "transfer",
+   "base_rate": 0.138,
+   "lin": 0.904,
+   "lin_sec": 0.6,
+   "mlp": 0.91,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "A",
+   "probe": "s9 tokens -> OPP throttle+steer",
+   "pool": "tgt_s9cat",
+   "target": "opp_thrsteer",
+   "kind": "reg",
+   "status": "transfer",
+   "lin": 0.075,
+   "lin_sec": 0.4,
+   "rff": 0.029,
+   "rff_sec": 0.4,
+   "mlp": 0.041,
+   "mlp_sec": 0.9
+  },
+  {
+   "tier": "A",
+   "probe": "s9 tokens -> OPP boost held",
+   "pool": "tgt_s9cat",
+   "target": "opp_boostbtn",
+   "kind": "cls",
+   "status": "transfer",
+   "base_rate": 0.222,
+   "lin": 0.752,
+   "lin_sec": 0.6,
+   "mlp": 0.749,
+   "mlp_sec": 0.9
+  }
+ ],
+ "sample_eff": [
+  {
+   "pool": "maskball_pool",
+   "target": "ball_rel_now",
+   "n": 2000,
+   "lin": 0.475
+  },
+  {
+   "pool": "maskball_pool",
+   "target": "ball_rel_now",
+   "n": 8000,
+   "lin": 0.515
+  },
+  {
+   "pool": "maskball_pool",
+   "target": "ball_rel_now",
+   "n": 24000,
+   "lin": 0.53
+  },
+  {
+   "pool": "tgt_s9cat",
+   "target": "ball_rel_1s",
+   "n": 2000,
+   "lin": 0.823
+  },
+  {
+   "pool": "tgt_s9cat",
+   "target": "ball_rel_1s",
+   "n": 8000,
+   "lin": 0.868
+  },
+  {
+   "pool": "tgt_s9cat",
+   "target": "ball_rel_1s",
+   "n": 24000,
+   "lin": 0.879
+  },
+  {
+   "pool": "tgt_s9cat",
+   "target": "opp_thrsteer",
+   "n": 2000,
+   "lin": -0.037
+  },
+  {
+   "pool": "tgt_s9cat",
+   "target": "opp_thrsteer",
+   "n": 8000,
+   "lin": 0.04
+  },
+  {
+   "pool": "tgt_s9cat",
+   "target": "opp_thrsteer",
+   "n": 24000,
+   "lin": 0.075
+  }
+ ]
+}

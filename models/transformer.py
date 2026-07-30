@@ -53,7 +53,10 @@ class Transformer(nn.Module):
         # know which position they predicted); instead forward() adds the target
         # slot's position encoding, so each query is mask_token + pos[masked_idx].
         if proj is not False:
-            self.mask_token = nn.Parameter(torch.randn(1, residual_dim))
+            self.mask_token = nn.Parameter(torch.zeros(1, residual_dim))
+            self.out_proj = nn.Linear(self.dim, self.dim)
+            nn.init.eye_(self.out_proj.weight)
+            nn.init.zeros_(self.out_proj.bias)
 
         # Depth-dependent residual rescaling (BEiT/DINO/MAE, carried into I-JEPA &
         # V-JEPA). Every residual branch pours variance into the stream, so left
@@ -132,5 +135,6 @@ class Transformer(nn.Module):
         # encoder: normalizes all output latents; predictor: normalizes the mask-query
         # outputs — either way the returned tokens land on the LayerNorm manifold.
         x = self.out_norm(x)
+        if self.proj: x = self.out_proj(x)
 
         return x
