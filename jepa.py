@@ -81,7 +81,7 @@ class JEPA(nn.Module):
         state = self.encoder.pos(state)  # add pos encoding to all tokens
 
         # mask the given objects
-        masked_indices, non_masked_tokens = build_mask(state, self.mask_probs, self.objects)
+        masked_indices, non_masked_tokens = masked_indices, non_masked_tokens = self.build_future_mask(state, self.objects)
 
         # run the non-masked objects through the necessary encoder
         context_latents = self.encoder(non_masked_tokens)
@@ -115,4 +115,13 @@ class JEPA(nn.Module):
         mask = torch.zeros(num_tokens, dtype=torch.bool, device=device)
         mask[torch.randperm(num_tokens, device=device)[:num_masked]] = True
         return mask
+
+    # jepa.py — ADD this (keep build_mask where it is, see note below)
+    def build_future_mask(self, state, num_objects, ctx_range=(6, 12)):
+        B, T, D = state.shape
+        ctx = int(torch.randint(ctx_range[0], ctx_range[1] + 1, (1,)).item())  # one draw per batch
+        masked_idx = torch.arange(ctx * num_objects, T, device=state.device).unsqueeze(0).expand(B, -1)
+        return masked_idx, state[:, : ctx * num_objects]
+
+    # jepa.forward — swap one line
 
