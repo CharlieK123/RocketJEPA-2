@@ -1,5 +1,5 @@
 """
-verdict.py — offline arbiter for the "is it collapsing or just growing a mean?" question.
+probes.py — offline arbiter for the "is it collapsing or just growing a mean?" question.
 
 For each checkpoint it computes, on IDENTICAL data:
   geometry   raw_cos (the number in your panel), centered_cos (after removing the
@@ -16,11 +16,11 @@ Interpretation:
   probe R^2 below the persistence baseline            -> rep not earning its keep yet.
 
 Run on the vast box from the repo root (defaults avoid touching the training GPU):
-  python verdict.py --shards /workspace/data/shards_75k \
+  python probes.py --shards /workspace/data/shards_75k \
       --ckpts ../checkpoints/<RUN>/rjepa_ALARM_step8000_collapse.pt \
               ../checkpoints/<RUN>/rjepa_ALARM_step14000_collapse.pt \
               ../checkpoints/<RUN>/rjepa_ALARM_step20000_collapse.pt
-Sanity-check the plumbing anywhere with:  python verdict.py --selftest
+Sanity-check the plumbing anywhere with:  python probes.py --selftest
 """
 import argparse, math, json
 from pathlib import Path
