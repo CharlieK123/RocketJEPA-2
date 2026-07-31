@@ -98,13 +98,41 @@ def reps_and_preds(model, win, ctx, device, chunk=256):
     return torch.cat(hm), torch.cat(ls), torch.cat(pt)
 
 
+def _find_cfg(d):
+    """Recursively locate a model-config dict anywhere in checkpoint meta."""
+    if isinstance(d, dict):
+        if "latent_dim" in d:
+            return d
+        for v in d.values():
+            r = _find_cfg(v)
+            if r is not None:
+                return r
+    return None
+
+
 def load_model(path, rand_init=False):
     ckpt = torch.load(path, map_location="cpu", weights_only=False)
-    cfg = (ckpt.get("meta") or {}).get("model")
+    cfg = _find_cfg(ckpt.get("meta"))
+    if cfg is None:                      # fall back to main.py under common names
+        import main as _m
+        for name in ("MODEL_CFG", "model_cfg", "CFG", "cfg"):
+            cfg = getattr(_m, name, None)
+            if isinstance(cfg, dict) and "latent_dim" in cfg:
+                break
+            cfg = None
     if cfg is None:
-        from main import MODEL_CFG as cfg
+        raise SystemExit(
+            f"\nNo model config found in {Path(path).name} meta and none importable from main.py.\n"
+            "Fix: add to main.py (module level) a dict matching THIS run's architecture, e.g.\n"
+            "  MODEL_CFG = dict(latent_dim=..., encoder_blocks=..., encoder_hdim=..., encoder_attheads=...,\n"
+            "                   proj_blocks=..., proj_hdim=..., proj_attheads=..., momentum=(0.998, 1.0, 100_000),\n"
+            "                   obj_lengths=(19, 19, 9, 7, 170), emb_hdim=..., mask_probs=[.1, .35, .45, .05, .05])\n"
+            "A wrong value fails loudly at load_state_dict (shape mismatch) — that guard is your friend.")
     torch.manual_seed(123)
-    model = JEPA(**{**cfg, "mask_probs": torch.tensor(cfg["mask_probs"])})
+    kw = dict(cfg)
+    if "mask_probs" in kw:
+        kw["mask_probs"] = torch.tensor(kw["mask_probs"])
+    model = JEPA(**kw)
     if not rand_init:
         model.load_state_dict(ckpt["model"])
     return model.eval()
